@@ -1650,32 +1650,29 @@ do
 				utility:Tween(circle, {ImageTransparency = 0}, 0.1)
 				
 				value = self:updateSlider(slider, nil, nil, min, max, value)
+				callback(value)
 				
 				utility:Wait()
 			end
-			callback(value)
+			
 			wait(0.5)
 			utility:Tween(circle, {ImageTransparency = 1}, 0.2)
 		end)
 		
-        textbox.FocusLost:Connect(function()
-            local text = textbox.Text
+		textbox.FocusLost:Connect(function()
+			if not tonumber(textbox.Text) then
+				value = self:updateSlider(slider, nil, default or min, min, max)
+				callback(value)
+			end
+		end)
+		
+		textbox:GetPropertyChangedSignal("Text"):Connect(function()
+			local text = textbox.Text
 			
 			if not allowed[text] and not tonumber(text) then
 				textbox.Text = text:sub(1, #text - 1)
-            elseif not allowed[text] then
-                if tonumber(text) > max then
-                    text = max
-                elseif tonumber(text) < min then
-                    text = min
-                end
-                
+			elseif not allowed[text] then	
 				value = self:updateSlider(slider, nil, tonumber(text) or value, min, max)
-				callback(value)
-            end
-            
-			if not tonumber(textbox.Text) then
-				value = self:updateSlider(slider, nil, default or min, min, max)
 				callback(value)
 			end
 		end)
