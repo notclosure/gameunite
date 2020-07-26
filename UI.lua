@@ -465,7 +465,7 @@ do
 		
 		self.toggling = true
 		
-		local container = self.container.Main
+		local container = game.CoreGui["Games Unite Testing Place"].Main
 		local topbar = container.TopBar
 		
 		if self.position then
